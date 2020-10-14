@@ -1,4 +1,4 @@
-.o
-NCUSIM
+*.o
+NCUSim
 GeneralUtilities
 RPiBaseModules
