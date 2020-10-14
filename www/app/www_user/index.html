@@ -1,0 +1,403 @@
+<!DOCTYPE HTML>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9">
+    <title>Vertiv G3</title>
+    <link rel="stylesheet" type="text/css" href="../css/skin.2013.css?v=1.2.10T19">
+    <link rel="stylesheet" type="text/css" href="../css/skin.en.css?v=1.2.10T19">
+    <!--[if lt IE 8]><script type="text/javascript">document.execCommand("BackgroundImageCache", false, true);</script><![endif]-->
+</head>
+<!--[if !IE]><body><![endif]-->
+<!--[if lte IE 8]><body class="ltIE8"><![endif]-->
+<div id="ModuleLoading" class="ModuleLoading"><span id="LoadingContent" class="LoadingContent">Loading, please wait.</span></div>
+<div id="wrapper">
+    <div id="headertop">
+        <div id="alarm" class="alarm"></div>
+    </div>
+    <div id="header"></div>
+    <div id="container">
+        <div id="sider"></div>
+        <div id="content">
+            <div id="main">
+                <div id="mainBar"></div>
+                <div id="mainContent"></div>
+            </div>
+            <div id="siderinfo"><i></i></div>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="SystemTime"><span class='iframe_system_time'></span></div>
+        <div class="copyright">&copy;2018 Vertiv Tech Co.,Ltd.All rights reserved.</div>
+    </div>
+</div>
+<div style="display:none">
+    <!--缓存主页图片，加快更新�?�度，避免页面刷新时出现闪烁-->
+    <img src='../images/current_hor_right.gif' />
+    <img src='../images/current_turn_down.gif' />
+    <img src='../images/current_turn_up.gif' />
+    <img src='../images/current_ver_down.gif' />
+    <img src='../images/current_ver_up.gif' />
+    <img src='../images/home_system_icon.png' />
+    <img src='../images/hometotal.png' />
+</div>
+<script id="tmp_header" type="text/x-dot-template" charset="utf-8">
+    <%var args= it.args,data = it.data ? it.data : it;%>
+	<div class="header-loginInfo"><i></i>Welcome:<em><%=jQuery.cookie("name")%></em><a href="#" hideFocus="true" id="headerLogout">SIGN OUT</a></div>
+    <div class="logo"></div>
+</script>
+<script id="tmp_sider" type="text/x-dot-template" charset="utf-8">
+    <%var args= it.args,data = it.data ? it.data : it;%>
+	<ul class="sider-list">
+		<li class="menu-home"><a class="currentMenu" data='{"data":"/var/datas/data.index.html","template":"tmp.index.html","fn":"false,HomePage"}' hidefocus="true" href="#">Home</a></li>
+        
+        <li class="menu-setting"><a data='{"data":"/var/datas/data.install_wizard.html","template":"tmp.setting_tabs.html,tmp.install_wizard.html","fn":"date_time_picker_min,date_time_picker,Setting","render":"artTemplate"}' hidefocus="true" href="#">Settings</a></li>
+        <li class="menu-hl"><a data='{"data":"/var/datas/data.history_log.html","template":"tmp.history_alarmlog.html","fn":"false,date_time_picker_min,date_time_picker,History","name":"HistoryDevice","render":"artTemplate"}' hidefocus="true" href="#">History Log</a></li>
+        
+        <li class="menu-si"><a data='{"data":"/var/datas/data.system_inventory.html","template":"tmp.system_inventory.html","render":"artTemplate"}' hidefocus="true" href="#">System Inventory</a></li>
+        <%if(Number(args['level'])>=4){ %>
+        <li class="menu-as"><a data='{"data":"/var/datas/data.install_wizard.html","template":"tmp.adv_setting_tabs.html,tmp.setting_ipv4.html","render":"doT"}' hidefocus="true" href="#">Advanced Settings</a></li>
+        <%} %>
+        <%if(Number(args['level'])>=4 && jQuery.cookie("name")=="emersonadmin"){ %>
+        <li class="menu-te"><a href="#" id='LinkToACU'>Engineer Settings</a></li>
+        <%} %>
+	</ul>
+	<div class="sider-info">
+		<dl>
+            <dt>System Status</dt>
+            <dd class="clearfix"><span style="width:120px">System Voltage</span><em id="SideVoltage"></em></dd>
+            <dd class="clearfix"><span style="width:120px">System Current</span><em id="SideCurrent"></em></dd>
+			<dd class="clearfix" style="display:none;"><span style="width:120px">Converter Voltage</span><em id="SideConverterVoltage"></em></dd>
+			<dd class="clearfix" style="display:none;"><span style="width:120px">Converter Current</span><em id="SideConverterCurrent"></em></dd>
+            <dt style="margin-top: 5px;">System Specifications</dt>
+            <dd class="clearfix"><span style="width:90px">System Name</span><em id="SideSite"></em></dd>
+            <dd class="SiderController clearfix"><span>Rectifiers</span><em><%=Configs.Sider.Controller[0] || "" %></em></dd>
+            <dd class="SiderController clearfix"><span>Converters</span><em><%=Configs.Sider.Controller[1] || "" %></em></dd>
+            <dd class="SiderController clearfix"><span>Solar Converters</span><em><%=Configs.Sider.Controller[2] || "" %></em></dd>            
+		</dl>
+		<dl class="sider-info-ss">
+			<dt>Controller Specifications</dt>
+            <dd class="clearfix"><span>Product Model</span><em><%=data.system[0]%></em></dd>
+            <dd class="clearfix"><span>Serial Number</span><em><%=data.system[1]%></em></dd>
+            <dd class="clearfix"><span>Hardware Version</span><em><%=data.system[2]%></em></dd>
+            <dd class="clearfix"><span>Software Version</span><em><%=data.system[3]%></em></dd>
+            <dd class="clearfix"><span>Config Version</span><em><%=data.system[4]%></em></dd>
+		</dl>
+		<dl class="sider-info-ss">
+			<dt>Site Information</dt>
+            <dd class="clearfix"><span>Site Name</span><em id="SiteName"></em></dd>
+            <dd class="clearfix"><span>Site Location</span><em id="SiteLocation"></em></dd>
+		</dl>
+	</div>
+    <div id='siderSwitch'><span></span><a href="#" hideFocus="true"></a></div>
+</script>
+<script id="tmp_mainBar" type="text/x-dot-template" charset="utf-8">
+    <%var args= it.args,data = it.data ? it.data : it;%>
+	<div class="mainBar-nav"><em></em><i>Home</i><%if(data.navsp){%><%=data.navsp%><%};if(data.nav){%><%=data.nav%><%}%></div>
+</script>
+<script id="tmp_alarm" type="text/x-dot-template" charset="utf-8">
+    <div class="alarm-bar" <%if(jQuery.cookie("language_type")==1&&jQuery.cookie("loc_lang_type")!=6&&jQuery.cookie("loc_lang_type")!=7){ %> style="position: static;" <%}%>>
+		<ul class="alarm-tab">
+			  <li class="<%if(it.AllAlarms==0){%>alarm-a2 <%}else{%>alarm-a <%}%>alarmPop"><span>All Alarms(<em><%=it.AllAlarms%></em>)</span></li>
+			  <li class="<%if(it.Observation==0){%>alarm-o2 <%}else{%>alarm-o <%}%>alarmPop"><span>Observation(<em><%=it.Observation%></em>)</span></li>
+			  <li class="<%if(it.Major==0){%>alarm-m2 <%}else{%>alarm-m <%}%>alarmPop"><span>Minor(<em><%=it.Major%></em>)</span></li>
+			  <li class="<%if(it.Critical==0){%>alarm-c2 <%}else{%>alarm-c <%}%>alarmPop"><span>Major(<em><%=it.Critical%></em>)</span></li>
+		</ul>
+		<div class="alarm-auto2"><input type="checkbox" id="autoAlarm" name="autoAlarm" /><label for="autoAlarm">Auto Popup</label></div>
+		<a href="javascript:void(0)" hidefocus="true" id="AlmSoundOff" style="display:none">Touch Screen To Silence Alm</a>
+	</div>
+	<a href="#" class="alarmHandle <%if(Configs.Alarm.show){ %> alarmClose <%} else { %> alarmOpen <%} %>" hideFocus="true"></a>
+	<div id="alarmContent" style="display:<%if(Configs.Alarm.show){ %> block <%} else { %> none; <%} %>;">
+	<div class="alarm-list-title">
+	<ul class="A-T">
+			<li class="A-T-i">Index</li>
+			<li class="A-T-al">Alarm Level</li>
+			<li class="A-T-r">Relative Device</li>
+			<li class="A-T-sn">Signal Name</li>
+			<li class="A-T-st">Sample Time</li>
+	</ul>
+	</div>
+	<div class="alarm-list alarm-content" id="alarmList">
+            <div class="popup alarm-popup" template='<div class="popup-content">{{=it.info}}</div><div class="popup-arrow"></div>'></div>
+		    <%
+            var lang = jQuery.cookie("language_type");
+            var list= it.Content,alen=list.length;
+		    var alls=[], oa = [],x=0,ma=[],y=0,ca = [],z=0;
+            var LevelName = ["Observation", "Minor", "Major"];
+            for(var a=0;a<alen;a++){
+                var alarmTipClass = "";
+                if(list[a][4] && list[a][4] !=""){
+                    alarmTipClass = "alarm-tip";
+                    if(list[a][2][lang].length>30){
+                       var alarmTip = "<i info='"+list[a][4][lang]+"' style='background:none;padding:0;_width:220px'>"+list[a][2][lang]+"</i><em></em>";
+                    } else {
+                        var alarmTip = "<i info='"+list[a][4][lang]+"'>"+list[a][2][lang]+"</i>";
+                    }
+                } else {
+                    var alarmTip =  list[a][2][lang];
+                };
+                var span = "";
+                var levelClass= "";
+                switch(list[a][0]){
+                    case 1:
+                        span = "OB";
+                        levelClass = "OA";
+                        break;
+                    case 2:
+                        span = "MN";
+                        levelClass = "MA";
+                        break;
+                    case 3:
+                        span = "MJ";
+                        levelClass = "CA";
+                        break;
+                }
+                var ev = "";
+				if(a%2==0){ev="A-L-even";};
+                alls.push('<ul class="A-L '+ev+'"><li class="A-L-i">'+(a+1)+'</li><li class="A-L-al"><em>'+span+'</em><span class="A-'+levelClass+'"></span></li><li class="A-L-r" title="'+list[a][1][lang]+'">'+list[a][1][lang]+'</li><li class="A-L-sn '+alarmTipClass+'" title="'+list[a][2][lang]+'">'+alarmTip+'</li><li class="A-L-st">'+Pages.footer(Pages.changetime(list[a][3]),"page")+'</li></ul>');
+                switch(list[a][0]){
+					case 1:
+						var ec = "";x++;
+						if(x%2!=0){ec="A-L-even";};
+						oa.push('<ul class="A-L '+ec+'"><li class="A-L-i">'+x+'</li><li class="A-L-al"><em>'+span+'</em><span class="A-'+levelClass+'"></span></li><li class="A-L-r" title="'+list[a][1][lang]+'">'+list[a][1][lang]+'</li><li class="A-L-sn '+alarmTipClass+'" title="'+list[a][2][lang]+'">'+alarmTip+'</li><li class="A-L-st">'+Pages.footer(Pages.changetime(list[a][3]),"page")+'</li></ul>');
+                        break;
+                    case 2:
+						var ec = "";y++;
+						if(y%2!=0){ec="A-L-even";};
+						ma.push('<ul class="A-L '+ec+'"><li class="A-L-i">'+y+'</li><li class="A-L-al"><em>'+span+'</em><span class="A-'+levelClass+'"></span></li><li class="A-L-r" title="'+list[a][1][lang]+'">'+list[a][1][lang]+'</li><li class="A-L-sn '+alarmTipClass+'" title="'+list[a][2][lang]+'">'+alarmTip+'</li><li class="A-L-st">'+Pages.footer(Pages.changetime(list[a][3]),"page")+'</li></ul>');
+                        break;
+					case 3:
+						var ec = "";z++;
+						if(z%2!=0){ec="A-L-even";};
+                        ca.push('<ul class="A-L '+ec+'"><li class="A-L-i">'+z+'</li><li class="A-L-al"><em>'+span+'</em><span class="A-'+levelClass+'"></span></li><li class="A-L-r" title="'+list[a][1][lang]+'">'+list[a][1][lang]+'</li><li class="A-L-sn '+alarmTipClass+'" title="'+list[a][2][lang]+'">'+alarmTip+'</li><li class="A-L-st">'+Pages.footer(Pages.changetime(list[a][3]),"page")+'</li></ul>');
+                        break;
+				}
+			}%>
+		<div class="tab_item hide">
+			<%=alls.join("")%>
+		</div>
+		<div class="tab_item hide">
+			<%=oa.join("")%>
+		</div>
+		<div class="tab_item hide">
+			<%=ma.join("")%>
+		</div>
+		<div class="tab_item hide">
+			<%=ca.join("")%>
+		</div>
+	</div>
+  </div>
+</script>
+<script type="text/javascript">
+    var isError = false;
+    //window.onerror放在�?有调用js前面，以监测可能出现的js错误，让这些错误全部返回true;
+    //�?有可能出现的js错误将不再提示，不会再有因js错误而需要调�?
+    //�?要调试错误，请删除下�?"alert(txt)"的注释和注释return true
+    window.onerror = function (msg, url, l) {
+        isError = true;
+        var txt = "";
+        txt = "There was an error on this page.\n\n";
+        txt += "Error: " + msg + "\n";
+        txt += "URL: " + url + "\n";
+        txt += "Line: " + l + "\n\n";
+        txt += "Click OK to continue.\n\n";
+        //alert(txt);
+        return true
+    }
+    //如果系统reload时出现语法错�?,停留在loading状�?��?�系统将�?3秒后重新reload()，以恢复系统正常显示
+    function SetReload() {
+        setTimeout(function () {
+            if (isError) {
+                location.reload();
+            }
+        }, 60000); //3000
+    };
+    SetReload();
+</script>
+<script language="javascript">
+    //定义全局对象Language,用来保存各种语言资源
+    var Language = {
+        Html: {
+            '001': "Data format error, getting the data again...please wait.",
+            '002': "Fail to load the data, please check the network and data file.",
+            '003': "Template webpage not exist or network error.",
+            "005": "Data lost.",
+            "011": "Setting...please wait.",
+            "012": "Confirm logout?",
+            "013": "Loading data, please wait.",
+            "014": "Please shut down the browser to return to the home page.",
+            "015": "OK",
+            "016": "Error: ",
+            "017": "Retry",
+            "018": "Loading...",
+            "019": "Time expired. Please login again.",
+            "020": "Re-loading",
+            "021": "File does not exist or unable to load the file due to a network error.",
+            "022": "id is \"",
+            "023": "Request error.",
+            "024": "Login again.",
+            "025": "No Data",
+            "026": "Peak Current",
+            "027": "Refresh",
+            "028": "There is no data to show.",
+            "029": "Fail to connect to controller, please login again.",
+            "030": "Link attribute \"data\" data structure error, should be {} object format.",
+            "031": "The format of \"validate\" is incorrect.  It should be have {} object format.  Please check the template file.",
+            "032": "Data format error.",
+            "033": "Too many clicks. Please wait.",
+            "034": "Refresh webpage",
+            "035": "Refresh console",
+            "036": "Communication fail.",
+            "036_1": "[OK]Reconnect. [Cancel]Stop the page.",
+            "037": "Confirm the change to the control value?",
+            "038": "Unknown error.",
+            "039": "Tips",
+            "040": "Back to Battery List",
+            "041": "Set successfully. Controller is restarting, please wait",
+            "042": "seconds.",
+            "043": "Back to the login page, please wait.",
+            "045": "Confirm to be set to",
+            "046": "controller will restart.",
+            "047": "Template error, please refresh the page.",
+            "048": "Jump to the engineer web pages, please use IE browser.",
+            "049": "Jumping, please wait.",
+            "050": "Fail to jump.",
+            "051": "Please select new alarm level.",
+            "052": "Please select new relay number.",
+            "053": "After setting you need to wait",
+            "054": "",
+            "055": "Request error, please retry.",
+            "056": "Please select",
+            "057": "NA",
+            "058": "Please select equipment.",
+            "059": "Please select signal type.",
+            "060": "Please select signal.",
+            "061": "Full name is too long",
+            "062": "The High 2 Curr Limit Alarm must be larger than the High 1 Curr Limit Alarm"
+        },
+        Validate: {
+            "001": "The value can not be empty.",
+            "002_int": "The value must be a positive integer or 0.",
+            "002_float": "The value must be a floating point number.",
+            "002_unsigned_int": "The value must be an integer.",
+            "003": "The value is out of range.",
+            "004": "No change to the current value.",
+            "005": "Please input an email address in the form name@domain.",
+            "006": "Please enter an IP address in the form nnn.nnn.nnn.nnn.",
+            "007": "Setting date error.",
+            "008": "Special characters are not allowed.",
+            "009": "Time format error or time is beyond the range. The format should be: Year/Month/Day Hour/Minute/Second",
+            "010": "Time format error or time is beyond the range. The format should be: Day/Month/Year Hour/Minute/Second",
+            "011": "Time format error or time is beyond the range. The format should be: Month/Day/Year Hour/Minute/Second"
+        },
+        Datetimepicker: {
+            monthNames: ["January", "February", "March",
+                "April", "May", "June", "July",
+                "August", "September", "October",
+                "November", "December"
+            ],
+            monthNamesShort: ["Jan", "Feb", "Mar",
+                "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep",
+                "Oct", "Nov", "Dec"
+            ],
+            dayNames: ["Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday",
+                "Saturday"
+            ],
+            dayNamesShort: ["Sun", "Mon", "Tue",
+                "Wed", "Thu", "Fri",
+                "Sat"
+            ],
+            dayNamesMin: ["Sun", "Mon", "Tue",
+                "Wed", "Thu", "Fri",
+                "Sat"
+            ],
+            currentText: "Current Time",
+            closeText: "Confirm",
+            timeText: "Time",
+            hourText: "Hour",
+            minuteText: "Minute",
+            secondText: "Second"
+        },
+        Setting: [
+            "Failed.", //[0]"Unknown error!",
+            "Successful.", //[1]"Successfully!",
+            "Failed. Conflicting setting.", //[2]"Fail!",
+            "Failed. No privileges.", //[3]"No ahtority!",
+            "No information to send.", //[4]"No information to send.",
+            "Failed. Controller is hardware protected.", //[5]"Failure, ACU is hardware protected"
+            "Time expired. Please login again." //[6]"Over time"
+        ],
+        History: [
+            "Unknown error.", //[0]"Unknown error!",
+            "Successful.", //[1]"Successfully!",
+            "No data.", //[2]"No data to be queried.",
+            "Failed", //[3]"Fail!",
+            "Failed. No privileges.", //[4]"No ahtority!",
+            "Failed to communicate with the controller.", //[5]"Fail to communicate with ACU."
+            "Clear successful.", //[6]"Clear Successfully"
+            "Time expired. Please login again." //[7]"Over time"
+        ],
+        Chart: {
+            "001": "There is an error in the input parameter.  It should be in the format ({}).",
+            "002": "(Data is beyond the normal range.)",
+            "003": "Date:",
+            "004": "Temperature Trend Diagram",
+            "005": "Capacity Trend Diagram"
+        }
+    };
+    //文件放缓存版本后�?（每次更新版本需求改此版本好�?
+    var CacheVersion_num = "1.2.10T19";
+</script>
+<!--[if lt IE 9]><script src="../js/excanvas.min.js" type="text/javascript"></script><![endif]-->
+<script src="../js/emerson.base.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //使用load则，等所有图片等都下载完后才执行
+    $(window).load(function () {
+        require.config({
+            urlArgs: "bust=" + CacheVersion_num,
+            //默认页面js加载路径
+            baseUrl: '../js/modules',
+            //G3�?用到的各文件路径,不需要写后缀".js"
+            paths: {
+                config: '../release/emerson.config',
+                validate: '../release/emerson.validate',
+                page: '../release/emerson.page',
+                chart: '../release/emerson.chart',
+                control: '../release/emerson.control',
+                //以下merson.all文件对以�?5个文件进行了整合并压�?
+                min: '../emerson.all'
+            }
+        });
+        //�?发代码时，development设为true，则会分别加�?5个未压缩的文�?
+        //发布版本时，development设为false，则会加载emerson.all.js文件,注意此时要将更改过的代码重新压缩并旋置到文件emerson.all.js�?
+        var development = true;
+        var jsArray = development ? ['config', 'validate', 'page', 'chart', 'control'] : ['min'];
+
+        //利用requirejs中的require函数加载G3依赖的js文件
+        require(jsArray, function () {
+            Control.Initialization();
+        }, function (err) {
+            //其中�?个文件加载出错则reload();
+            isError = true;
+            SetReload();
+        });
+        var ghmi = jQuery.cookie("GHMISTYLE");
+        if (ghmi == "yes") {
+            dynamicLoadCss("../css/ghmi.css?v=" + CacheVersion_num + "")
+        }
+        function dynamicLoadCss(url) {
+            var head = document.getElementsByTagName('head')[0];
+            var link = document.createElement('link');
+            link.type = 'text/css';
+            link.rel = 'stylesheet';
+            link.href = url;
+            head.appendChild(link);
+        }
+    });
+</script>
+</body>
+</html>

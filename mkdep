@@ -1,0 +1,4 @@
+#!/bin/bash
+gcc -MM -IGeneralUtilities -IRPiBaseModules main.c > depends.mk
+gcc -MM -IGeneralUtilities -IRPiBaseModules UserInput.c >> depends.mk
+gcc -MM -IGeneralUtilities -IRPiBaseModules HTTPServer.c >> depends.mk
