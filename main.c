@@ -32,7 +32,7 @@
  * Local Data
  *****************************************************************************/
 bool
-MainStartUI;
+MainStartCLI = true;
 
 string
 MainPortNumberDefault = "80";

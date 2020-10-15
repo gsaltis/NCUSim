@@ -11,10 +11,13 @@ MainProcessCommandLine
   for ( i = 1 ; i < argc ; i++ ) {
 	command = argv[i];
 
+	//
 	if ( StringEqualsOneOf(command, "-h", "--help", NULL) ) {
 	  MainDisplayHelp();
 	  exit(EXIT_SUCCESS);
 	}
+
+	//
 	if ( StringEqualsOneOf(command, "-w", "--www", NULL) ) {
 	  i++;
 	  if ( i == argc ) {
@@ -26,6 +29,12 @@ MainProcessCommandLine
 		FreeMemory(MainWWWDirectory);
 	  }
 	  MainWWWDirectory = StringCopy(argv[i]);
+	  continue;
+	}
+
+	//
+	if ( StringEqualsOneOf(command, "-i", "--noui", NULL) ) {
+	  MainStartCLI = false;
 	  continue;
 	}
 
@@ -43,6 +52,8 @@ MainProcessCommandLine
 	  MainPortNumber = StringCopy(argv[i]);
 	  continue;
 	}
+
+	//
 	fprintf(stderr, "%s is an unrecognized command\n", command);
 	MainDisplayHelp();
 	exit(EXIT_FAILURE);

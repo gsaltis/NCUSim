@@ -5,9 +5,13 @@ void
 MainStartThreads
 ()
 {
-  MainUserInputThreadID = UserInputInitialize();
+  if ( MainStartCLI ) {
+    MainUserInputThreadID = UserInputInitialize();
+  }
   MainHTTPServerThreadID = HTTPServerInitialize();
 
-  pthread_join(MainUserInputThreadID, NULL);
+  if ( MainStartCLI ) {
+    pthread_join(MainUserInputThreadID, NULL);
+  }
   pthread_join(MainHTTPServerThreadID, NULL);
 }

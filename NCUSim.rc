@@ -26,7 +26,7 @@ test -f $DAEMON || exit 0
 
 start() {
   log_daemon_msg "Starting NCU Simulator" "NCUSim"
-  start_daemon -p $PIDFILE $DAEMON  -w  /home/pi/Source/NCUSim/www
+  start_daemon -p $PIDFILE $DAEMON  -w  /home/pi/Source/NCUSim/www 
   log_end_msg $?
 }
 

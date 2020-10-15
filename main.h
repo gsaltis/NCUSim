@@ -23,7 +23,7 @@
  * Exported Data
  *****************************************************************************/
 extern bool
-MainStartUI;
+MainStartCLI;
 
 extern string
 MainPortNumberDefault;
