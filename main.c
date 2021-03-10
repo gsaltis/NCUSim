@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <String.h>
+#include <StringUtils.h>
 #include <MemoryManager.h>
 #include <pthread.h>
 

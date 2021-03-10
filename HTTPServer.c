@@ -16,7 +16,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <mongoose.h>
-#include <String.h>
+#include <StringUtils.h>
 
 /*****************************************************************************!
  * Local Headers

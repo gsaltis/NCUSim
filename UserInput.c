@@ -16,7 +16,7 @@
 #include <pthread.h>
 #include <linenoise.h>
 #include <MemoryManager.h>
-#include <String.h>
+#include <StringUtils.h>
 
 /*****************************************************************************!
  * Local Headers
